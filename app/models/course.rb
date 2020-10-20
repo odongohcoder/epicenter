@@ -196,7 +196,6 @@ private
             always_visible = params[:always_visible]
             objectives = params[:objectives]
             week = params[:week]
-
             day = class_weeks[week-1].last
             if always_visible
               visible_date = nil
@@ -208,14 +207,12 @@ private
               visible_date = day.beginning_of_day + 8.hours
               due_date = visible_date + 9.hours
             end
-
             cr = code_reviews.new(title: title, github_path: filename, submissions_not_required: submissions_not_required, visible_date: visible_date, due_date: due_date)
             cr.objectives = objectives.map.with_index(1) {|obj, i| Objective.new(content: obj, number: i)}
           end
         end
       end
     end
-
   end
 
   def reassign_admin_current_courses
@@ -237,23 +234,11 @@ private
   end
 
   def set_class_days
-    if language.name.include?('part-time track')
-      days = [0,2,4]
-    elsif language.parttime?
-      days = [2,4]
-    else
-      days = [1,2,3,4,5]
-    end
     class_days = []
     day = start_date.beginning_of_week
     language.number_of_days.times do
-      while !days.include?(day.wday) || (language.skip_holiday_weeks? && Rails.configuration.holiday_weeks.include?(day.strftime('%Y-%m-%d')))
-        if language.skip_holiday_weeks? && Rails.configuration.holiday_weeks.include?(day.strftime('%Y-%m-%d'))
-          day = day.next_week
-        else
-          day = day.next
-        end
-      end
+      day = day.next_week while Rails.configuration.holiday_weeks.include?(day.strftime('%Y-%m-%d')) && language.name != 'Internship'
+      day = day.next until language.days_of_week.include?(day.wday)
       class_days << day unless Rails.configuration.holidays.include?(day.strftime('%Y-%m-%d'))
       day = day.next
     end

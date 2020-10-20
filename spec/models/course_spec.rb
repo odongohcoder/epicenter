@@ -180,8 +180,8 @@ describe Course do
 
     it 'calculates class days for a part-time class' do
       course = Course.create({ language: part_time_track.languages.first, start_date: Date.parse('2017-03-13'), office: office, track: part_time_track, start_time: '6:00 PM', end_time: '9:00 PM' })
-      expect(course.start_date).to eq(Date.parse('2017-03-14'))
-      expect(course.end_date).to eq(Date.parse('2017-06-22'))
+      expect(course.start_date).to eq(Date.parse('2017-03-12'))
+      expect(course.end_date).to eq(Date.parse('2017-06-21'))
       expect(course.class_days.count).to eq(30)
     end
   end
@@ -523,11 +523,11 @@ describe Course do
       expect(course.class_days.count).to eq 35
     end
 
-    it 'creates course days for part-time js/react course including sundays' do
-      course = FactoryBot.create(:js_part_time_js_react_course, class_days: [], start_date: Date.parse('2020-01-07'))
-      expect(course.start_date).to eq Date.parse('2020-01-07')
-      expect(course.end_date).to eq Date.parse('2020-03-01')
-      expect(course.class_days.count).to eq 24
+    it 'creates course days for part-time full-track course' do
+      course = FactoryBot.create(:intro_part_time_c_react_course, class_days: [], start_date: Date.parse('2021-01-04'))
+      expect(course.start_date).to eq Date.parse('2021-01-04')
+      expect(course.end_date).to eq Date.parse('2021-02-14')
+      expect(course.class_days.count).to eq 23 # 23 due to time period including 1 holiday
       expect(course.class_days.last.sunday?).to eq true
     end
   end

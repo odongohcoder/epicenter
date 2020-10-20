@@ -50,7 +50,7 @@ class Cohort < ApplicationRecord
       layout_params[:course_layout_files].each_with_index do |course_layout_filename, index|
         next_course_start_date = skip_holidays(self.courses.last.try(:end_date).try(:next_week) || start_date)
         if course_layout_filename.include? 'internship'
-          self.courses << Course.find_or_create_by({ office: office, language: Language.find_by(level: 4), start_date: next_course_start_date, start_time: start_time, end_time: end_time, layout_file_path: course_layout_filename, active: false })
+          self.courses << Course.find_or_create_by({ office: office, language: Language.active.find_by(name: 'Internship'), start_date: next_course_start_date, start_time: start_time, end_time: end_time, layout_file_path: course_layout_filename, active: false })
           internship_course = courses.internship_courses.last
           internship_course.set_description
           internship_course.save

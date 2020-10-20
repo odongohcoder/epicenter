@@ -67,9 +67,9 @@ describe Cohort do
     end
   end
 
-  describe 'creating a part-time js/react cohort from layout file' do
+  describe 'creating a part-time full-stack cohort from layout file' do
     let(:admin) { FactoryBot.create(:admin) }
-    let(:track) { FactoryBot.create(:part_time_js_react_track) }
+    let(:track) { FactoryBot.create(:part_time_c_react_track) }
 
     it 'creates a part-time js/react cohort and courses' do
       allow(Github).to receive(:get_content).with('example_cohort_layout_path').and_return({:content=>"---\n:track: Part-Time Intro to Programming\n:start_time: 5:30 PM\n:end_time: 8:30 PM\n:course_layout_files:\n- example_course_layout_path\n- example_course_layout_path\n- example_course_layout_path\n"})
